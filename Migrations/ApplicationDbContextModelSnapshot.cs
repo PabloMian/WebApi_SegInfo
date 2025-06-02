@@ -80,7 +80,7 @@ namespace WebApi_SegInfo.Migrations
                         {
                             PkUsuario = 1,
                             FkRol = 1,
-                            Nombre = "Majo",
+                            Nombre = "Pablo",
                             Password = "123",
                             UserName = "Usuario"
                         });

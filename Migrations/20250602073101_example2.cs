@@ -52,7 +52,7 @@ namespace WebApi_SegInfo.Migrations
             migrationBuilder.InsertData(
                 table: "Usuarios",
                 columns: new[] { "PkUsuario", "FkRol", "Nombre", "Password", "UserName" },
-                values: new object[] { 1, 1, "Majo", "123", "Usuario" });
+                values: new object[] { 1, 1, "Pablo", "123", "Usuario" });
 
             migrationBuilder.CreateIndex(
                 name: "IX_Usuarios_FkRol",

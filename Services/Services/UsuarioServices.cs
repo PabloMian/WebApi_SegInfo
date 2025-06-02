@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using WebApi_SegInfo.Context;
 using WebApi_SegInfo.Services.IServices;
 
-namespace WebApi_SegInfo.Services.Services
+namespace WebApi_SegInfo.Services.IServices
 {
     public class UsuarioServices : IUsuarioServices
     {
@@ -14,9 +14,6 @@ namespace WebApi_SegInfo.Services.Services
         {
             _context = context;
         }
-
-
-        /// Obtiene la lista completa de usuarios con sus roles asociados.
 
         public async Task<Response<List<Usuario>>> GetAll()
         {
@@ -33,7 +30,6 @@ namespace WebApi_SegInfo.Services.Services
             }
         }
 
-        /// Obtiene un usuario por su ID.
         public async Task<Response<Usuario>> GetbyId(int id)
         {
             try
@@ -53,13 +49,10 @@ namespace WebApi_SegInfo.Services.Services
             }
         }
 
-
-        /// Crea un nuevo usuario.
         public async Task<Response<Usuario>> Create(UsuarioRequest request)
         {
             try
             {
-                // Validaciones
                 if (string.IsNullOrEmpty(request.Nombre) || string.IsNullOrEmpty(request.UserName) || string.IsNullOrEmpty(request.Password))
                 {
                     return new Response<Usuario>(null, "Nombre, UserName y Password son obligatorios");
@@ -79,7 +72,7 @@ namespace WebApi_SegInfo.Services.Services
                 {
                     Nombre = request.Nombre,
                     UserName = request.UserName,
-                    Password = request.Password, // Nota: En producción, deberías hashear la contraseña
+                    Password = request.Password, // Sin hashear
                     FkRol = request.FkRol
                 };
 
@@ -93,12 +86,10 @@ namespace WebApi_SegInfo.Services.Services
             }
         }
 
-        /// Actualiza un usuario existente.
         public async Task<Response<Usuario>> Update(int id, UsuarioRequest request)
         {
             try
             {
-                // Validaciones
                 if (string.IsNullOrEmpty(request.Nombre) || string.IsNullOrEmpty(request.UserName) || string.IsNullOrEmpty(request.Password))
                 {
                     return new Response<Usuario>(null, "Nombre, UserName y Password son obligatorios");
@@ -122,7 +113,7 @@ namespace WebApi_SegInfo.Services.Services
 
                 usuario.Nombre = request.Nombre;
                 usuario.UserName = request.UserName;
-                usuario.Password = request.Password; // Nota: En producción, hashear la contraseña
+                usuario.Password = request.Password; // Sin hashear
                 usuario.FkRol = request.FkRol;
 
                 _context.Usuarios.Update(usuario);
@@ -135,8 +126,6 @@ namespace WebApi_SegInfo.Services.Services
             }
         }
 
-
-        /// Elimina un usuario por su ID.
         public async Task<Response<bool>> Delete(int id)
         {
             try
@@ -155,6 +144,15 @@ namespace WebApi_SegInfo.Services.Services
             {
                 throw new Exception($"Error al eliminar usuario: {ex.Message}");
             }
+        }
+
+        public async Task<Usuario> Authenticate(string username, string password)
+        {
+            var usuario = await _context.Usuarios
+                .Include(u => u.Roles)
+                .FirstOrDefaultAsync(u => u.UserName == username && u.Password == password);
+
+            return usuario; // Devuelve null si las credenciales son inválidas
         }
     }
 }

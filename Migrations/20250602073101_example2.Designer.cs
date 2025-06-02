@@ -12,7 +12,7 @@ using WebApi_SegInfo.Context;
 namespace WebApi_SegInfo.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20250527005137_example2")]
+    [Migration("20250602073101_example2")]
     partial class example2
     {
         /// <inheritdoc />
@@ -83,7 +83,7 @@ namespace WebApi_SegInfo.Migrations
                         {
                             PkUsuario = 1,
                             FkRol = 1,
-                            Nombre = "Majo",
+                            Nombre = "Pablo",
                             Password = "123",
                             UserName = "Usuario"
                         });
